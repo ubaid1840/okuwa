@@ -1,50 +1,30 @@
 "use client";
-import Button from "@/components/ui/Button";
-import Checkbox from "@/components/ui/Checkbox";
-import Logo from "@/components/logo";
+
+import { Button } from "@/components/ui/shadcn-button";
+import { Checkbox } from "@/components/ui/shadcn-checkbox";
+import { ShadcnLogo } from "@/components/ui/shadcn-logo";
+import { Input } from "@/components/ui/shadcn-input";
+import { Label } from "@/components/ui/shadcn-label";
 import {
-  Flex,
-  HStack,
-  Input,
-  Stack,
-  Text,
-  VStack,
-  Image,
-  useDisclosure,
-  AlertDialog,
-  AlertDialogBody,
-  AlertDialogCloseButton,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogOverlay,
-  InputGroup,
-  InputLeftElement,
-  Icon,
-  useToast,
-  Box,
-  useColorMode,
-  useColorModeValue,
-} from "@chakra-ui/react";
-import { useContext, useEffect, useRef, useState } from "react";
+  Dialog,
+  DialogContent,
+  DialogFooter,
+} from "@/components/ui/shadcn-dialog";
+import { ShadcnFooterOne } from "@/components/ui/shadcn-footer";
+import { ShadcnDarkModeSwitcher } from "@/components/ui/shadcn-dark-mode-switcher";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { HospitalContext } from "@/store/context/HospitalContext";
 import { useTranslations } from "next-intl";
-import { usePathname, useRouter } from "next/navigation";
-import { CiSearch } from "react-icons/ci";
+import { useRouter } from "next/navigation";
+import { Search, Check } from "lucide-react";
 import { medicalServices } from "./data";
-import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
-import { theme } from "@/data/data";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth, db } from "@/config/firebase";
-import useCheckSession from "@/config/checkSession";
+import { auth } from "@/config/firebase";
 import axios from "@/lib/axiosInstance";
-import { collection, getDoc, getDocs, query, where } from "firebase/firestore";
-import { MdCancel } from "react-icons/md";
-import Cookies from "js-cookie";
-import { FooterOne } from "@/components/Footer";
+import { useColorMode, useToast } from "@chakra-ui/react";
 import { showToastFailed } from "@/utils/toastUtils";
-import DarkModeSwitcher from "@/components/DarkModeSwitcher";
+import Image from "next/image";
+import { cn } from "@/lib/utils";
 
 export default function Page() {
   const { colorMode } = useColorMode();
@@ -54,10 +34,9 @@ export default function Page() {
   const [remember, setRemember] = useState(false);
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [isPasswordValid, setIsPasswordValid] = useState(false);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isOpen, setIsOpen] = useState(false);
   const [currentID, setCurrentID] = useState(0);
   const [selected, setSelected] = useState([]);
-  const pathname = usePathname();
   const [selectedMedicalCenter, setSelectedMedicalCenter] = useState([]);
   const [searchItem, setSearchItem] = useState("");
   const toastIdRef = useRef(null);
@@ -80,12 +59,6 @@ export default function Page() {
     "surgerySubheading",
     "radiologyAndMedicalImagingSubheading",
   ];
-
-  // const checkSession = useCheckSession();
-
-  // useEffect(() => {
-  //   checkSession()
-  // }, []);
 
   useEffect(() => {
     if (email.includes("@") && email.includes(".")) {
@@ -112,7 +85,7 @@ export default function Page() {
   }
 
   function handleSelectedOption(name) {
-    const temp = selectedMedicalCenter.filter((item, index) => item === name);
+    const temp = selectedMedicalCenter.filter((item) => item === name);
     if (temp.length > 0) {
       removeSelection(name);
     } else {
@@ -180,7 +153,7 @@ export default function Page() {
               if (response.data?.settingsData) {
                 handleLogin(response.data.role);
               } else {
-                onOpen();
+                setIsOpen(true);
               }
             } else {
               handleLogin(response.data.role);
@@ -207,7 +180,7 @@ export default function Page() {
   }
 
   function handleGetStarted() {
-    onClose();
+    setIsOpen(false);
     const temp = [...selected, ...selectedMedicalCenter];
     axios
       .post("/api/insert", {
@@ -215,282 +188,246 @@ export default function Page() {
         columns: ["centerid", "settings_array"],
         values: [currentID, temp],
       })
-      .then((response) => {
-        // console.log(response.data);
+      .then(() => {
         handleLogin("admin");
       });
   }
 
   return (
-    <Flex height="100vh">
-      <Box pos={"fixed"} top={5} right={10}>
-        <DarkModeSwitcher />
-      </Box>
-      <Flex flex={1} direction="column" justify="space-between" align="center">
-        <VStack
-          width={"400px"}
-          alignItems={"flex-start"}
-          spacing={5}
-          justify="center"
-          flex={1}
-        >
-          <Logo />
-          {/* <Text color={colorMode === 'dark' && 'gray.300'}variant="heading">{t("welcomeBack")}</Text> */}
-          <Text color={colorMode === "dark" && "gray.300"} variant="heading">
-            {t("welcomeBackSubheading")}
-          </Text>
-          <Stack dir="column" spacing={1} width={"100%"}>
-            <Text
-              color={colorMode === "dark" && "gray.300"}
-              variant="subheading"
-            >
-              {" "}
-              {t("email")}
-            </Text>
+    <div className="flex min-h-screen flex-col lg:flex-row">
+      {/* Dark Mode Switcher */}
+      <div className="fixed right-4 top-4 z-50 md:right-10 md:top-5">
+        <ShadcnDarkModeSwitcher />
+      </div>
 
+      {/* Left Side - Form */}
+      <div className="flex flex-1 flex-col items-center justify-between px-4 py-8 lg:px-8">
+        <div className="flex w-full max-w-[400px] flex-1 flex-col items-start justify-center gap-5">
+          <ShadcnLogo />
+
+          <p className="text-base text-foreground dark:text-gray-300">
+            {t("welcomeBackSubheading")}
+          </p>
+
+          {/* Email Field */}
+          <div className="flex w-full flex-col gap-1.5">
+            <Label className="text-sm font-medium text-foreground dark:text-gray-300">
+              {t("email")}
+            </Label>
             <Input
               placeholder={t("emailInput")}
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              className="h-11"
             />
-          </Stack>
-          <Stack dir="column" spacing={1} width={"100%"}>
-            <Text
-              color={colorMode === "dark" && "gray.300"}
-              variant="subheading"
-            >
-              {" "}
-              {t("password")}
-            </Text>
+          </div>
 
+          {/* Password Field */}
+          <div className="flex w-full flex-col gap-1.5">
+            <Label className="text-sm font-medium text-foreground dark:text-gray-300">
+              {t("password")}
+            </Label>
             <Input
               placeholder={t("passwordInput")}
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              className="h-11"
             />
-          </Stack>
-          <HStack width={"100%"} justify={"space-between"}>
-            <Checkbox onChange={(e) => setRemember(e.target.checked)}>
-              {t("rememberMe")}
-            </Checkbox>
+          </div>
+
+          {/* Remember Me & Forgot Password */}
+          <div className="flex w-full items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id="remember"
+                checked={remember}
+                onCheckedChange={(checked) => setRemember(checked)}
+              />
+              <Label
+                htmlFor="remember"
+                className="cursor-pointer text-sm font-normal text-foreground dark:text-gray-300"
+              >
+                {t("rememberMe")}
+              </Label>
+            </div>
             <Link
               href="/forgetpassword"
-              _hover={{ textDecorationLine: "none" }}
+              className="text-sm font-medium text-primary hover:underline"
             >
-              <Text variant="link" fontWeight={"500"}>
-                {t("forgetPassword")}
-              </Text>
+              {t("forgetPassword")}
             </Link>
-          </HStack>
-          {/* <Link href={"/admin"} style={{ width: "100%" }}> */}
+          </div>
+
+          {/* Sign In Button */}
           <Button
-            isLoading={loading}
+            loading={loading}
             onClick={() => {
               setLoading(true);
               handleSignIn();
             }}
-            width={"100%"}
-            isDisabled={!isEmailValid || !isPasswordValid ? true : false}
+            className="h-11 w-full"
+            disabled={!isEmailValid || !isPasswordValid}
           >
-            {" "}
             {t("signIn")}
           </Button>
-          {/* </Link> */}
-          <HStack width={"auto"} alignSelf={"center"}>
-            <Text
-              color={colorMode === "dark" && "gray.300"}
-              variant="description"
-            >
-              {" "}
-              {t("noAccount")}
-            </Text>
-            <Link href="/signup" _hover={{ textDecorationLine: "none" }}>
-              <Text variant="link" fontWeight={"500"}>
-                {t("signUp")}
-              </Text>
-            </Link>
-          </HStack>
-        </VStack>
 
-        <FooterOne />
-      </Flex>
-      <Flex flex={1}>
+          {/* Sign Up Link */}
+          <div className="flex w-full items-center justify-center gap-1">
+            <span className="text-sm text-muted-foreground dark:text-gray-300">
+              {t("noAccount")}
+            </span>
+            <Link
+              href="/signup"
+              className="text-sm font-medium text-primary hover:underline"
+            >
+              {t("signUp")}
+            </Link>
+          </div>
+        </div>
+
+        <ShadcnFooterOne />
+      </div>
+
+      {/* Right Side - Image */}
+      <div className="relative hidden flex-1 lg:block">
         <Image
           src="/assets/login.png"
-          alt="Full Size Image"
-          objectFit="cover"
-          width="100%"
-          height="100%"
+          alt="Login illustration"
+          fill
+          className="object-cover"
+          priority
         />
-      </Flex>
+      </div>
 
-      <AlertDialog
-        motionPreset="slideInBottom"
-        onClose={onClose}
-        isOpen={isOpen}
-        isCentered
-      >
-        <AlertDialogOverlay bg={"#344054B2"} />
+      {/* Services Selection Dialog */}
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogContent className="max-h-[90vh] w-[95vw] max-w-[900px] overflow-y-auto p-4 md:p-6">
+          <div className="flex flex-col gap-6 md:flex-row md:gap-10">
+            {/* Left Column - Main Services */}
+            <div className="flex w-full flex-col gap-3">
+              <div className="flex justify-center">
+                <ShadcnLogo />
+              </div>
+              <h2 className="text-center text-lg font-medium text-foreground dark:text-gray-300">
+                {t("selectServicesOffered")}
+              </h2>
+              <p className="text-center text-sm text-muted-foreground dark:text-gray-400">
+                {t("selectServicesOfferedSubheading")}
+              </p>
 
-        <AlertDialogContent maxW={"90%"} width={"900px"}>
-          <AlertDialogBody mb={5}>
-            <HStack align={"flex-start"} w={"100%"} gap={10} mt={5}>
-              <VStack gap={3} width={"100%"}>
-                <Logo />
-                <Text
-                  color={colorMode === "dark" ? "gray.300" : "#101828"}
-                  fontSize={"18px"}
-                  fontWeight={"500"}
-                >
-                  {t("selectServicesOffered")}
-                </Text>
-
-                <Text
-                  color={colorMode === "dark" ? "gray.300" : "#667085"}
-                  fontSize={"14px"}
-                  fontWeight={"400"}
-                >
-                  {t("selectServicesOfferedSubheading")}
-                </Text>
-
-                {itemsHeading.map((item, index) => (
-                  <VStack
+              {itemsHeading.map((item, index) => {
+                const isSelected = selected.includes(item);
+                return (
+                  <div
                     key={index}
-                    w={"inherit"}
-                    align={"flex-start"}
-                    p={4}
-                    border={"1px solid"}
-                    borderRadius={"8px"}
-                    borderColor={
-                      selected[index] == true ? "#155EEF" : "#EAECF0"
-                    }
-                    bg={selected[index] == true ? "#EFF4FF" : "#FFFFFF"}
+                    className={cn(
+                      "flex w-full flex-col gap-1 rounded-lg border p-4",
+                      isSelected
+                        ? "border-primary bg-primary/5"
+                        : "border-border bg-background"
+                    )}
                   >
-                    <HStack align={"flex-start"}>
+                    <div className="flex items-start gap-3">
                       <Checkbox
-                        style={{ marginTop: "5px" }}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setSelected((prevState) => {
-                              const newState = [...prevState];
-                              newState.push(item);
-                              return newState;
-                            });
+                        checked={isSelected}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            setSelected((prev) => [...prev, item]);
                           } else {
-                            const temp = selected.filter(
-                              (item, ind) => ind !== index
+                            setSelected((prev) =>
+                              prev.filter((i) => i !== item)
                             );
-                            setSelected([...temp]);
                           }
                         }}
+                        className="mt-0.5"
                       />
-                      <VStack align={"flex-start"} gap={0}>
-                        <Text
-                          variant={"subheading"}
-                          fontSize={"16px"}
-                          color={
-                            selected[index] == true ? "#0040C1" : "#344054"
-                          }
+                      <div className="flex flex-col gap-0.5">
+                        <span
+                          className={cn(
+                            "text-base font-medium",
+                            isSelected
+                              ? "text-primary"
+                              : "text-foreground dark:text-gray-300"
+                          )}
                         >
                           {t(item)}
-                        </Text>
-                        <Text
-                          variant={"description"}
-                          color={
-                            selected[index] == true ? "#155EEF" : "#667085"
-                          }
+                        </span>
+                        <span
+                          className={cn(
+                            "text-sm",
+                            isSelected
+                              ? "text-primary/80"
+                              : "text-muted-foreground"
+                          )}
                         >
                           {itemsSubheading[index]}
-                        </Text>
-                      </VStack>
-                    </HStack>
-                  </VStack>
-                ))}
-              </VStack>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
 
-              <VStack width={"100%"}>
-                <Text
-                  color={colorMode === "dark" ? "gray.300" : "#101828"}
-                  fontSize={"18px"}
-                  fontWeight={"500"}
-                >
-                  {t("couldNotFindCenter")}
-                </Text>
+            {/* Right Column - Search Services */}
+            <div className="flex w-full flex-col gap-3">
+              <h2 className="text-center text-lg font-medium text-foreground dark:text-gray-300">
+                {t("couldNotFindCenter")}
+              </h2>
+              <p className="text-center text-sm text-muted-foreground dark:text-gray-400">
+                {t("couldNotFindCenterSubheading")}
+              </p>
 
-                <Text
-                  color={colorMode === "dark" ? "gray.300" : "#667085"}
-                  fontSize={"14px"}
-                  fontWeight={"400"}
-                >
-                  {t("couldNotFindCenterSubheading")}
-                </Text>
-                <InputGroup>
-                  <InputLeftElement pointerEvents="none">
-                    <Icon as={CiSearch} boxSize={5} color="#667085" />
-                  </InputLeftElement>
-                  <Input
-                    placeholder={t("search")}
-                    value={searchItem}
-                    onChange={(e) => setSearchItem(e.target.value)}
-                  />
-                </InputGroup>
-                <VStack
-                  align={"flex-start"}
-                  gap={0}
-                  maxH={"550px"}
-                  overflowY={"auto"}
-                  width={"100%"}
-                >
-                  {medicalServices
-                    .filter((item) =>
-                      t(item)
-                        ?.toLocaleLowerCase()
-                        .includes(searchItem.toLocaleLowerCase())
-                    )
-                    .map((item, index) => (
-                      <HStack
-                        borderBottomWidth={1}
-                        borderBottomColor={theme.divider.primary}
-                        p={3}
-                        bg={checkExists(index) ? "#F5F8FF" : "white"}
-                        _hover={{ cursor: "pointer" }}
-                        width={"100%"}
-                        justify={"space-between"}
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  placeholder={t("search")}
+                  value={searchItem}
+                  onChange={(e) => setSearchItem(e.target.value)}
+                  className="h-11 pl-10"
+                />
+              </div>
+
+              <div className="flex max-h-[400px] flex-col overflow-y-auto md:max-h-[550px]">
+                {medicalServices
+                  .filter((item) =>
+                    t(item)
+                      ?.toLocaleLowerCase()
+                      .includes(searchItem.toLocaleLowerCase())
+                  )
+                  .map((item, index) => {
+                    const isSelected = checkExists(item);
+                    return (
+                      <div
                         key={index}
-                        onClick={() => {
-                          handleSelectedOption(item);
-                        }}
+                        onClick={() => handleSelectedOption(item)}
+                        className={cn(
+                          "flex w-full cursor-pointer items-center justify-between border-b border-border p-3 transition-colors hover:bg-muted/50",
+                          isSelected && "bg-primary/5"
+                        )}
                       >
-                        <HStack>
-                          <Text
-                            color={colorMode === "dark" && "gray.300"}
-                            variant={"subheading"}
-                          >
-                            {t(item)}
-                          </Text>
-                        </HStack>
-                        {checkExists(item) && <CheckIcon />}
-                      </HStack>
-                    ))}
-                </VStack>
-              </VStack>
-            </HStack>
-          </AlertDialogBody>
+                        <span className="text-sm font-medium text-foreground dark:text-gray-300">
+                          {t(item)}
+                        </span>
+                        {isSelected && (
+                          <Check className="h-4 w-4 text-primary" />
+                        )}
+                      </div>
+                    );
+                  })}
+              </div>
+            </div>
+          </div>
 
-          <AlertDialogFooter w={"100%"}>
-            <Button
-              w={"100%"}
-              onClick={() => {
-                handleGetStarted();
-              }}
-            >
+          <DialogFooter className="mt-4">
+            <Button onClick={handleGetStarted} className="h-11 w-full">
               {t("getStarted")}
             </Button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </Flex>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
   );
 }
