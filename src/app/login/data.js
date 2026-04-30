@@ -1,0 +1,28 @@
+export const medicalServices = [
+    "Radiology",
+    "GynecologyandObstetrics",
+    "Pediatrics",
+    "Cardiology",
+    "Dermatology",
+    "IntensiveCareUnit",
+    "EmergencyServices",
+    "Orthopedics",
+    "Neurology",
+    "GeneralSurgery",
+    "Urology",
+    "Ophthalmology",
+    "Oncology",
+    "PhysiotherapyandRehabilitation",
+    "LaboratoryServices",
+    "Endocrinology",
+    "Pulmonology",
+    "Gastroenterology",
+    "PsychiatryandMentalHealth",
+    "DentalCare",
+    "Nephrology",
+    "EarNoseandThroat",
+    "AllergyandImmunology",
+    "Pharmacy",
+    "NutritionandDietetics"
+  ];
+  

@@ -1,0 +1,29 @@
+import { errors } from '@/data/data';
+import pool from '@/lib/db'; // Import PostgreSQL pool connection
+import { NextResponse } from 'next/server';
+
+export async function GET(req, {params}) {
+  try {
+    const { cid } = params
+    if (!cid) {
+      return NextResponse.json({ message: errors[0] }, { status: 400 });
+    }
+    const result = await pool.query(
+        `SELECT * FROM room WHERE centerid = $1 ORDER BY id DESC`,
+        [cid]
+      );
+    
+    return NextResponse.json(
+        result.rows,
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error('Error saving settings:', error);
+    return NextResponse.json(
+      { message: errors[1] },
+      { status: 500 }
+    );
+  }
+}
+
+export const revalidate = 0;

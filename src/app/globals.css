@@ -1,0 +1,142 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+.react-datepicker-wrapper {
+  width: 100%;
+}
+.custom-datepicker {
+  width: 100%;
+  border: 0px solid;
+}
+.custom-datepicker:hover {
+  cursor:default
+}
+.custom-datepicker .react-datepicker__input-container input {
+  border: none; 
+  outline: none;
+}
+
+.custom-datepicker .react-datepicker__input-container input:focus {
+  border: none; /* Ensures no border on focus */
+  outline: none; /* Ensures no outline on focus */
+}
+
+.react-datepicker__input-container input {
+  border: none; /* Removes the border */
+  outline: none; /* Removes the focus outline */
+}
+
+.react-datepicker__input-container input:focus {
+  border: none; /* Ensures no border on focus */
+  outline: none; /* Ensures no outline on focus */
+}
+
+.customModalContainer {
+  justify-content: flex-end !important;
+}
+.customModalContent {
+  margin: 0px !important;
+  border-radius: 0px !important;
+  min-height: 100vh !important;
+  overflow-y: auto !important;
+}
+
+/* .sCsSbKP9yxvw4LQAeaTz, .ji5jASszKFf2CGCmbxEh, .pVo6XoSfywa4eLk9ef2S, .ji5jASszKFf2CGCmbxEh, .qiKszVnhEXQGhWJ0gGcL, .lRNsiz_pTf7YmA5QMh4z {
+  background-color: transparent !important;
+}
+
+.vjwEXnTmP6jAK8LlvWL_>div {
+ 
+  border-radius: 50px !important;
+}*/
+
+.sCsSbKP9yxvw4LQAeaTz {
+  min-width: 100% !important;
+} 
+
+.str-video__participant-details {
+  display: none;
+}
+
+.video-preview {
+  width: auto;
+  height: auto;
+}
+
+.str-video__device-settings {
+  width: 450px;
+}
+
+.p-calendar:not(.p-calendar-disabled).p-focus > .p-inputtext {
+  box-shadow: none !important;
+}
+
+.p-datepicker {
+  z-index: 9999 !important;
+}
+
+.css-22tkef {
+  border-bottom-width: 0px !important;
+}
+
+.css-kiplau{
+  border-bottom-width: 0px !important;
+}
+
+.custom-datepicker-dark {
+  background: black !important;
+}
+.p-component{
+  background-color: inherit !important;
+}
+.p-datepicker-header {
+  background-color: inherit !important;
+}
+
+body.chakra-ui-dark .p-datepicker {
+  color: #a1a1aa;
+
+}
+
+body.chakra-ui-dark .p-datepicker-month {
+  color: #a1a1aa;
+
+}
+
+body.chakra-ui-dark .p-datepicker-year {
+  color: #a1a1aa;
+
+}
+
+

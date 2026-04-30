@@ -1,0 +1,123 @@
+[
+    {
+      "KPI": "Hospital Mortality Rate",
+      "Data": [2.1, 1.8, 2.3, 2.0, 1.9]
+    },
+    {
+      "KPI": "Nosocomial Infection Rate",
+      "Data": [5.2, 4.8, 5.0, 4.9, 5.1]
+    },
+    {
+      "KPI": "30-Day Readmission Rate",
+      "Data": [12.3, 11.7, 13.0, 12.5, 11.9]
+    },
+    {
+      "KPI": "Postoperative Complication Rate",
+      "Data": [8.1, 7.9, 8.5, 8.3, 7.8]
+    },
+    {
+      "KPI": "Patient Satisfaction Score",
+      "Data": [85, 87, 86, 84, 88]
+    },
+    {
+      "KPI": "Bed Occupancy Rate",
+      "Data": [75, 78, 77, 76, 74]
+    },
+    {
+      "KPI": "Average Length of Stay (ALOS)",
+      "Data": [4.5, 4.7, 4.6, 4.8, 4.4]
+    },
+    {
+      "KPI": "Bed Turnover Rate",
+      "Data": [20, 21, 19, 22, 18]
+    },
+    {
+      "KPI": "Operating Room Utilization Rate",
+      "Data": [85, 82, 88, 84, 86]
+    },
+    {
+      "KPI": "Average Emergency Waiting Time",
+      "Data": [30, 32, 28, 31, 29]
+    },
+    {
+      "KPI": "Gross Operating Margin",
+      "Data": [20, 22, 21, 19, 23]
+    },
+    {
+      "KPI": "Cost per Admission",
+      "Data": [3500, 3400, 3600, 3550, 3450]
+    },
+    {
+      "KPI": "Cost-to-Revenue Ratio",
+      "Data": [0.75, 0.78, 0.76, 0.77, 0.74]
+    },
+    {
+      "KPI": "Accounts Receivable Recovery Rate",
+      "Data": [95, 94, 96, 93, 97]
+    },
+    {
+      "KPI": "Revenue per Patient",
+      "Data": [4500, 4600, 4400, 4550, 4650]
+    },
+    {
+      "KPI": "Patient Satisfaction Score",
+      "Data": [88, 87, 89, 90, 86]
+    },
+    {
+      "KPI": "Patient Recommendation Rate",
+      "Data": [70, 72, 71, 69, 73]
+    },
+    {
+      "KPI": "Staff Satisfaction Score",
+      "Data": [80, 82, 79, 81, 83]
+    },
+    {
+      "KPI": "Staff Turnover Rate",
+      "Data": [15, 14, 16, 15, 13]
+    },
+    {
+      "KPI": "Staff Well-being Index",
+      "Data": [60, 62, 61, 59, 63]
+    },
+    {
+      "KPI": "Compliance with Clinical Protocols Rate",
+      "Data": [98, 97, 99, 96, 100]
+    },
+    {
+      "KPI": "Adverse Event Rate",
+      "Data": [1.5, 1.7, 1.4, 1.6, 1.3]
+    },
+    {
+      "KPI": "Mandatory Training Compliance Rate",
+      "Data": [92, 90, 94, 91, 93]
+    },
+    {
+      "KPI": "Regulatory Compliance Audits",
+      "Data": [85, 87, 86, 84, 88]
+    },
+    {
+      "KPI": "Emergency Preparedness Score",
+      "Data": [75, 78, 76, 74, 77]
+    },
+    {
+      "KPI": "Equipment Utilization Rate",
+      "Data": [60, 62, 61, 59, 63]
+    },
+    {
+      "KPI": "Cost of Medical Supplies per Patient",
+      "Data": [200, 210, 195, 205, 215]
+    },
+    {
+      "KPI": "Availability of Critical Equipment",
+      "Data": [95, 94, 96, 97, 93]
+    },
+    {
+      "KPI": "Stockout Rate",
+      "Data": [5, 6, 4, 7, 3]
+    },
+    {
+      "KPI": "Average Equipment Repair Time",
+      "Data": [2.5, 2.3, 2.7, 2.6, 2.4]
+    }
+  ]
+  

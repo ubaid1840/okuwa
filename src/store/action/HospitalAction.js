@@ -1,0 +1,1 @@
+export const SET_HOSPITAL = 'SET_HOSPITAL'
