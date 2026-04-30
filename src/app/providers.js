@@ -5,12 +5,28 @@ import FacilityContextProvider from '@/store/context/FacilityContext';
 import HospitalContextProvider from '@/store/context/HospitalContext';
 import PatientContextProvider from '@/store/context/PatientContext';
 import SampleContextProvider from '@/store/context/SampleContext';
-import { ChakraProvider, defineStyleConfig, extendTheme } from '@chakra-ui/react'
+import { ChakraProvider, extendTheme, useColorMode } from '@chakra-ui/react'
 import { useEffect } from 'react';
 import UserContextProvider from '@/store/context/UserContext';
 import ColorContextProvider from '@/store/context/ColorContext';
 import { PrimeReactProvider } from 'primereact/api';
 import { theme } from '@/data/data';
+
+// Component to sync Chakra color mode with Tailwind dark class
+function ColorModeSync({ children }) {
+  const { colorMode } = useColorMode();
+  
+  useEffect(() => {
+    const root = document.documentElement;
+    if (colorMode === 'dark') {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+  }, [colorMode]);
+  
+  return children;
+}
 
 
 
@@ -134,21 +150,23 @@ export function Providers({ children }) {
     <PrimeReactProvider>
 
       <ChakraProvider theme={customTheme}>
-        <ColorContextProvider>
-          <UserContextProvider>
-            <HospitalContextProvider>
-              <PatientContextProvider>
-                <AppointmentContextProvider>
-                  <FacilityContextProvider>
-                    <SampleContextProvider>
-                      {children}
-                    </SampleContextProvider>
-                  </FacilityContextProvider>
-                </AppointmentContextProvider>
-              </PatientContextProvider>
-            </HospitalContextProvider>
-          </UserContextProvider>
-        </ColorContextProvider>
+        <ColorModeSync>
+          <ColorContextProvider>
+            <UserContextProvider>
+              <HospitalContextProvider>
+                <PatientContextProvider>
+                  <AppointmentContextProvider>
+                    <FacilityContextProvider>
+                      <SampleContextProvider>
+                        {children}
+                      </SampleContextProvider>
+                    </FacilityContextProvider>
+                  </AppointmentContextProvider>
+                </PatientContextProvider>
+              </HospitalContextProvider>
+            </UserContextProvider>
+          </ColorContextProvider>
+        </ColorModeSync>
       </ChakraProvider>
 
     </PrimeReactProvider>
