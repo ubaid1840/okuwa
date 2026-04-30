@@ -25,7 +25,7 @@ export default async function RootLayout({ children }) {
   // side is the easiest way to get started
   const messages = await getMessages();
   return (
-    <html lang={locale}>
+    <html lang={locale} className="bg-background">
       <body className={inter.className} suppressHydrationWarning={true}>
       <NextIntlClientProvider messages={messages}>
         <Suspense fallback={<Loading />}>
